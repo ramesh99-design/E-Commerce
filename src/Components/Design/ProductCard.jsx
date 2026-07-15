@@ -4,6 +4,7 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../Features/Cart/WishListSlice";
+import PriceDisplay from "../Design/PriceDisplay";
 
 export default function ProductCard({ item, title, detailLabel, onView }) {
   const dispatch = useDispatch();
@@ -47,8 +48,8 @@ export default function ProductCard({ item, title, detailLabel, onView }) {
         {title}
       </p>
       <p>
-        <span className="product-details">Price: </span>$
-        {item.price.toLocaleString("en-IN")}
+        <span className="product-details">Price: </span>
+        <PriceDisplay price={item.price} />
       </p>
       <p
         style={{

@@ -15,7 +15,6 @@ body {
 h1 {
   color: rgb(27, 27, 159);
 }
-
 /* ══════════════════════════════════════
    LAYOUT
 ══════════════════════════════════════ */
@@ -98,10 +97,10 @@ h1 {
 .btn-link {
   text-decoration: none;
   border: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   padding: 0.6rem 1.2rem;
   text-align: center;
-  border-radius: 2rem;
+  border-radius: 1rem;
   color: white;
   background-color: #16a34a;
   transition: all 0.3s;
@@ -109,7 +108,7 @@ h1 {
 }
 
 .btn-link:hover {
-  background-color: #15803d;
+  background-color: #09642a;
 }
 
 .btn-link:disabled {
@@ -134,6 +133,24 @@ h1 {
   background-color: rgb(185, 28, 28);
 }
 
+.btn-line-link {
+  font-size: 0.95rem;
+  text-decoration: none;
+  text-align: center;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 1rem;
+  background-color: #16a34a;
+  transition: all 0.3s;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+}
+
+.btn-line-link:hover {
+  background-color: #09642a;
+}
+
 .btn-primary-link {
   font-size: 0.95rem;
   text-decoration: none;
@@ -149,7 +166,7 @@ h1 {
 }
 
 .btn-primary-link:hover {
-  background-color: rgb(12, 34, 113);
+  background-color: rgb(4, 23, 92);
 }
 
 .btn-wishlist {
@@ -174,7 +191,102 @@ h1 {
   display: block;
   margin: 2rem auto;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
 
+.page-btn {
+  background-color: #2563eb;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.page-btn:hover {
+  background-color: #1d4ed8;
+}
+
+/* ══════════════════════════════════════
+   LOADING PAGE
+══════════════════════════════════════ */
+
+.skeleton-card {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 60px;
+  padding: 30px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  align-items: center;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 180px;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.skeleton-title {
+  height: 20px;
+  width: 80%;
+  margin-top: 15px;
+}
+
+.skeleton-text {
+  height: 14px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.skeleton-text.short {
+  width: 65%;
+}
+
+.skeleton-price {
+  width: 40%;
+  height: 22px;
+  margin-top: 15px;
+}
+
+.skeleton-button {
+  width: 100%;
+  height: 42px;
+  margin-top: 18px;
+  border-radius: 6px;
+  align-items: center;
+}
+
+/* Shared Skeleton Style */
+
+.skeleton-image,
+.skeleton-title,
+.skeleton-text,
+.skeleton-price,
+.skeleton-button {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f2f2f2 50%, #e0e0e0 75%);
+
+  background-size: 200% 100%;
+
+  animation: shimmer 1.4s linear infinite;
+
+  align-items: center;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
 /* ══════════════════════════════════════
    HOMEPAGE
 ══════════════════════════════════════ */

@@ -5,6 +5,8 @@ import SearchBar from "../../Components/Functional/SearchBar";
 import SortDropDown from "../../Components/Functional/SortDropDown";
 import FilterBar from "../../Components/Design/FilterBar";
 import ProductCard from "../../Components/Design/ProductCard";
+import Pagination from "../../Components/Design/Pagination";
+import LoadingSkeletonCard from "../../Components/Design/LoadingSkeletonCard";
 
 export default function BooksPage() {
   const navigate = useNavigate();
@@ -23,9 +25,12 @@ export default function BooksPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     async function loadProducts() {
       const data = await getProducts();
+      await new Promise((resolve) => setTimeout(resolve, 500));
       const books = data.filter((product) => product.category === "books");
       setProducts(books);
       setLoading(false);
@@ -76,21 +81,17 @@ export default function BooksPage() {
     default:
       break;
   }
-  if (loading) {
-    return (
-      <div className="container" style={{ textAlign: "center" }}>
-        Loading Books...
-      </div>
-    );
-  }
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = sortedProducts.slice(startIndex, endIndex);
 
   return (
     <div>
       <div className="card-header">
         <h1>Books</h1>
-        <Link
-          to="/"
-        >
+        <Link to="/">
           <button
             className="btn-primary-link"
             style={{ alignItems: "flex-end", marginLeft: "1rem" }}
@@ -120,19 +121,28 @@ export default function BooksPage() {
         />
       </div>
       <div className="card-grid">
-        {filtered.length === 0 ? (
-          <h2 style={{ textAlign: "center" }}>😕 No books found.</h2>
+        {loading ? (
+          <LoadingSkeletonCard count={1} />
+        ) : sortedProducts.length === 0 ? (
+          <h2 style={{ textAlign: "center" }}>😕 No products found.</h2>
         ) : (
-          sortedProducts.map((item) => (
+          currentItems.map((item) => (
             <ProductCard
               key={item.id}
               item={item}
               title={item.name}
-              detailLabel="Title"
+              detailLabel="Product"
               onView={NavigateToProductDetails}
             />
           ))
         )}
+        <div>
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
+        </div>
       </div>
     </div>
   );

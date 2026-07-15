@@ -27,24 +27,30 @@ export default function BooksDetails(props) {
           <span style={{ color: "red" }}>Out of Stock</span>
         )}
       </p>
-      <button
-        className="btn-primary-link"
-        onClick={() => {
-          dispatch(addToCart(props.product));
-          navigate("/cart");
-        }}
-      >
-        Add To Cart
-      </button>
-      <button className="btn-danger-link" onClick={() => navigate("/books")}>
-        Back
-      </button>
-      <button
-        className="btn-primary-link"
-        onClick={() => navigate(`/admin/products?id=${props.product.id}`)}
-      >
-        Edit
-      </button>
+      <div className="card-buttons" style={{ flex: 1 }}>
+        <button
+          className="btn-line-link"
+          onClick={() => {
+            dispatch(addToCart(props.product));
+            navigate("/cart");
+          }}
+          style={{}}
+        >
+          Add To Cart
+        </button>
+        <button
+          className="btn-danger-link"
+          onClick={() => navigate("/books")}
+        >
+          Back
+        </button>
+        <button
+          className="btn-primary-link"
+          onClick={() => navigate(`/admin/products?id=${props.product.id}`)}
+        >
+          Edit
+        </button>
+      </div>
     </div>
   );
 }

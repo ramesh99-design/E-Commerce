@@ -16,6 +16,7 @@ import LoginPage from "./Pages/Login/LoginPage";
 import SignUpPage from "./Pages/Login/SignUpPage";
 import AuthListener from "./Components/Functional/AuthListener";
 import ProductUpsertPage from "./Pages/ProductUpsertPage";
+import PaymentPages from "./Pages/PaymentPages";
 
 function Layout({ children }) {
   return (
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/products",
     element: <Layout>{withAuth(<ProductUpsertPage />)}</Layout>,
+  },
+  {
+    path: "/payment",
+    element: <Layout>{withAuth(<PaymentPages />)}</Layout>,
   },
 ]);
 

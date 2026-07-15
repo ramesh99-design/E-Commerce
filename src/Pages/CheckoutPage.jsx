@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { clearCart } from "../Features/Cart/CartSlice";
+import PriceDisplay from "../Components/Design/PriceDisplay";
 
 export default function CheckoutPage() {
   const { items, totalPrice } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState(() => {
@@ -29,20 +28,9 @@ export default function CheckoutPage() {
     });
   };
 
-  const placeOrder = (e) => {
+  const proceedToPayment = (e) => {
     e.preventDefault();
-
-    const order = {
-      id: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
-      date: new Date().toLocaleString(),
-      customer: formData,
-      cart: items,
-      total: totalPrice,
-    };
-    localStorage.setItem("lastOrder", JSON.stringify(order));
-    dispatch(clearCart());
-    localStorage.removeItem("checkoutForm");
-    navigate("/order-success");
+    navigate("/payment", { state: { customer: formData } });
   };
 
   if (items.length === 0) {
@@ -60,7 +48,7 @@ export default function CheckoutPage() {
     <div className="container">
       <h2>Checkout</h2>
       <div className="checkout-layout">
-        <form className="checkout-form" onSubmit={placeOrder}>
+        <form className="checkout-form" onSubmit={proceedToPayment}>
           <h2>Billing Details</h2>
           <input
             type="text"
@@ -105,14 +93,16 @@ export default function CheckoutPage() {
                 {item.name || item.title} x {item.quantity}
               </span>
               <span>
-                ${(item.price * item.quantity).toLocaleString("en-IN")}
+                <PriceDisplay price={item.price} quantity={item.quantity} />
               </span>
             </div>
           ))}
           <hr />
           <hr />
           <br />
-          <h2>Total: ${totalPrice.toLocaleString("en-IN")}</h2>
+          <h2>
+            Total: <PriceDisplay price={totalPrice} />
+          </h2>
         </div>
       </div>
     </div>

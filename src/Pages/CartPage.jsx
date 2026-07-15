@@ -6,6 +6,7 @@ import {
   decreaseQuantity,
   clearCart,
 } from "../Features/Cart/CartSlice";
+import PriceDisplay from "../Components/Design/PriceDisplay";
 
 export default function CartPage() {
   const { items, totalQuantity, totalPrice } = useSelector(
@@ -69,7 +70,7 @@ export default function CartPage() {
             <img src={item.imageLink} alt={item.name || item.title} />
             <div className="cart-item-details">
               <p className="product-details">{item.name || item.title}</p>
-              <p>₹{item.price.toLocaleString("en-IN")}</p>
+              <p><PriceDisplay price={item.price} /></p>
             </div>
             <div className="cart-item-actions">
               <button
@@ -86,7 +87,7 @@ export default function CartPage() {
                 +
               </button>
             </div>
-            <p>₹{(item.price * item.quantity).toLocaleString("en-IN")}</p>
+            <p><PriceDisplay price={item.price} quantity={item.quantity}/></p>
             <button
               className="btn-danger-link"
               onClick={() => dispatch(removeFromCart(item.id))}

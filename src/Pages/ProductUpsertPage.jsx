@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { productUpsert, getProductById } from "../Services/ProductServices";
 
 export default function ProductUpsertPage() {
   const [searchParams] = useSearchParams();
-  const isEditMode = Boolean(searchParams.get("id"))
+  const isEditMode = Boolean(searchParams.get("id"));
 
   const [category, setCategory] = useState("electronics");
-  const [docId, setDocId] = useState("");
+  const [docId, setDocId] = useState(() => searchParams.get("id"));
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [author, setAuthor] = useState("");
@@ -19,6 +19,8 @@ export default function ProductUpsertPage() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState("");
+
+  const navigate = useNavigate();
 
   const resetForm = () => {
     setDocId("");
@@ -45,12 +47,11 @@ export default function ProductUpsertPage() {
     setImageLink(existing.imageLink || "");
     setDescription(existing.description || "");
     setFeatured(existing.featured || false);
-    };
+  };
 
   useEffect(() => {
     const idFromUrl = searchParams.get("id");
     if (idFromUrl) {
-      setDocId(idFromUrl);
       loadProduct(idFromUrl);
     }
   }, [searchParams]);
@@ -219,25 +220,22 @@ export default function ProductUpsertPage() {
         {error && <p style={{ color: "red" }}>{error}</p>}
         {status && <p style={{ color: "green" }}>{status}</p>}
 
-        <button type="submit" className="btn-link" disabled={submitting}>
-          {submitting ? "Saving" : "Save"}
-        </button>
-        <button
-          type="button"
-          className="btn-danger-link"
-          style={{ marginLeft: "0.5rem" }}
-          onClick={resetForm}
-        >
-          Clear Form
-        </button>
-        <Link to="/">
-          <button
-            className="btn-primary-link"
-            style={{ alignItems: "flex-end", marginLeft: "1rem" }}
-          >
-            Home
+        <div className="card-buttons">
+          <button type="submit" className="btn-link" disabled={submitting}>
+            {submitting ? "Saving" : "Save"}
           </button>
-        </Link>
+          <button
+            type="button"
+            className="btn-danger-link"
+            style={{ marginLeft: "0.5rem" }}
+            onClick={resetForm}
+          >
+            Clear Form
+          </button>
+          <button className="btn-primary-link" onClick={() => navigate("/")}>
+            Back
+          </button>
+        </div>
       </form>
     </div>
   );

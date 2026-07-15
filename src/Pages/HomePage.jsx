@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function HomePage() {
   return (
     <div className="container">
-      <h1 className="title">Welcome to E-Shop</h1>
+      <h1 className="title">Welcome to Online Store</h1>
       <div className="home">
         <img
           src="https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg"

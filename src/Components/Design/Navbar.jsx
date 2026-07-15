@@ -22,7 +22,7 @@ export default function Navbar() {
   return (
     <nav className={`navbar ${isHomePage ? "navbar-left" : ""}`}>
       <Link to="/" className="nav-logo">
-        🛍️ EZ-Shopping
+        🛍️ EZ-Cart
       </Link>
 
       {!isHomePage && (
@@ -49,7 +49,7 @@ export default function Navbar() {
       )}
       {user && (
         <div className="navbar-right">
-          <span className="nav-user">Hello, {user.name || user.email}</span>
+          <span className="nav-user">Hello, {user.name}</span>
           <button className="btn-danger-link" onClick={handleLogout}>
             Logout
           </button>
