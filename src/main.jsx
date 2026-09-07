@@ -11,6 +11,6 @@ import { ToastContainer } from "react-toastify";
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <App />
-    <ToastContainer position="top-right" autoClose={2000} />
+    <ToastContainer position="top-right" autoClose={2500} />
   </Provider>,
 );

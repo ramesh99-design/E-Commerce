@@ -12,7 +12,7 @@ const firebaseConfig = {
   storageBucket: "e-commerce-react-1799.firebasestorage.app",
 
   messagingSenderId: "238029406208",
-
+  
   appId: "1:238029406208:web:e52a25299ee10ad268d8e5",
 
   measurementId: "G-1PDBDDNMG4",

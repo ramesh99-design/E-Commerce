@@ -9,7 +9,7 @@ import ElectronicsDetailPage from "./Pages/ProductPages/ElectronicsDetailsPage";
 import BooksDetailPage from "./Pages/ProductPages/BookDetailsPage";
 import CheckoutPage from "./Pages/CheckoutPage";
 import OrderSummaryPage from "./Pages/OrderSummaryPage";
-import Footer from "../src/Components/Design/Footer";
+import Footer from "./Components/Design/Footer";
 import WishlistPage from "./Pages/WishlistPage";
 import ProtectedRoute from "./Components/Functional/ProtectedRoute";
 import LoginPage from "./Pages/Login/LoginPage";
@@ -17,53 +17,64 @@ import SignUpPage from "./Pages/Login/SignUpPage";
 import AuthListener from "./Components/Functional/AuthListener";
 import ProductUpsertPage from "./Pages/ProductUpsertPage";
 import PaymentPages from "./Pages/PaymentPages";
+import ScrollToTop from "./Components/Functional/ScrollToTop";
+import { ThemeProvider } from "./Components/Functional/ThemeContext";
 
 function Layout({ children }) {
   return (
-    <>
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 selection:bg-violet-500 selection:text-white transition-colors duration-200">
+      <ScrollToTop />
       <Navbar />
-      {children}
+      <main className="flex-1">
+        {children}
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
 
 const withAuth = (element) => <ProtectedRoute>{element}</ProtectedRoute>;
+
 const router = createBrowserRouter([
+  // Public Auth Pages
   { path: "/login", element: <LoginPage /> },
   { path: "/signup", element: <SignUpPage /> },
+
+  // Public Browsing Routes
   {
     path: "/",
-    element: <Layout>{withAuth(<HomePage />)}</Layout>,
+    element: <Layout><HomePage /></Layout>,
     errorElement: <NotFoundPage />,
   },
   {
     path: "/electronics",
-    element: <Layout>{withAuth(<ElectronicsPage />)}</Layout>,
+    element: <Layout><ElectronicsPage /></Layout>,
   },
   {
     path: "/electronics/:id",
-    element: <Layout>{withAuth(<ElectronicsDetailPage />)}</Layout>,
+    element: <Layout><ElectronicsDetailPage /></Layout>,
   },
   {
     path: "/books",
-    element: <Layout>{withAuth(<BooksPage />)}</Layout>,
+    element: <Layout><BooksPage /></Layout>,
   },
   {
     path: "/books/:id",
-    element: <Layout>{withAuth(<BooksDetailPage />)}</Layout>,
+    element: <Layout><BooksDetailPage /></Layout>,
   },
   {
     path: "/cart",
-    element: <Layout>{withAuth(<CartPage />)}</Layout>,
+    element: <Layout><CartPage /></Layout>,
   },
-  {
-    path: "*",
-    element: <Layout>{withAuth(<NotFoundPage />)}</Layout>,
-  },
+
+  // Protected User & Admin Routes
   {
     path: "/checkout",
     element: <Layout>{withAuth(<CheckoutPage />)}</Layout>,
+  },
+  {
+    path: "/payment",
+    element: <Layout>{withAuth(<PaymentPages />)}</Layout>,
   },
   {
     path: "/order-success",
@@ -77,17 +88,19 @@ const router = createBrowserRouter([
     path: "/admin/products",
     element: <Layout>{withAuth(<ProductUpsertPage />)}</Layout>,
   },
+
+  // 404
   {
-    path: "/payment",
-    element: <Layout>{withAuth(<PaymentPages />)}</Layout>,
+    path: "*",
+    element: <Layout><NotFoundPage /></Layout>,
   },
 ]);
 
 export default function App() {
   return (
-    <>
+    <ThemeProvider>
       <AuthListener />
       <RouterProvider router={router} />
-    </>
+    </ThemeProvider>
   );
 }
