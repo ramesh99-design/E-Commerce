@@ -1,0 +1,39 @@
+@host = http://localhost:5156
+
+### Get all products
+GET http://localhost:5156/api/products
+Accept: application/json
+
+### Get product by ID
+GET http://localhost:5156/api/products/16
+Accept: application/json
+
+### Create product
+POST http://localhost:5156/api/products
+Content-Type: application/json
+
+{
+ "name": "XBox Controller",
+  "price": 129.99,
+  "category": "electronics",
+  "stock": 22,
+  "imageLink": "https://images.pexels.com/photos/6962206/pexels-photo-6962206.jpeg",
+  "description": "A wireless controller for Xbox gaming."
+}
+### Update product
+PUT http://localhost:5156/api/products/15
+Content-Type: application/json
+
+
+{
+  "name": "1984",
+  "price": 39.99,
+  "category": "books",
+  "stock": 20,
+  "imageLink": "http://localhost:5156/images/book2.jpg",
+  "description": "A dystopian novel by George Orwell.",
+  "author": "George Orwell"
+}
+
+### Delete product
+DELETE http://localhost:5156/api/products/8

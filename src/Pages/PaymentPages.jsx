@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate, Navigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import {
   CreditCard,
   Banknote,
-  ShieldCheck,
   Lock,
   ArrowLeft,
   Loader2,
-  CheckCircle2,
   AlertCircle,
 } from "lucide-react";
 import PriceDisplay from "../Components/Design/PriceDisplay";
@@ -27,7 +25,8 @@ function loadRazorpayScript() {
     document.body.appendChild(script);
   });
 }
-const RAZOR_TEST_KEY = "rzp_test_TDISihyRPXCh8H";
+
+const RAZOR_TEST_KEY = "rzp_test_TZ2qsxepBgqxmX";
 
 export default function PaymentPages() {
   const { items, totalPrice } = useSelector((state) => state.cart);
@@ -83,9 +82,9 @@ export default function PaymentPages() {
       name: "EZ-Cart Store",
       description: `Payment for ${items.length} item(s)`,
       prefill: {
-        name: customer.name,
-        email: customer.email,
-        contact: customer.phone,
+        name: customer.name || "",
+        email: customer.email || "",
+        contact: customer.phone || "",
       },
       theme: { color: "#7c3aed" },
       handler: (response) => {
@@ -109,10 +108,11 @@ export default function PaymentPages() {
         setProcessing(false);
         setError(`Payment failed: ${response.error.description}`);
       });
+
       razorpay.open();
     } catch (err) {
       setProcessing(false);
-      setError("Failed to open Razorpay modal. Please try again.");
+      setError("Failed to open Razorpay modal. Please check your API key configuration.");
     }
   };
 
@@ -171,9 +171,9 @@ export default function PaymentPages() {
               Select your preferred gateway to complete your transaction
             </p>
 
-            {/* Selector Cards */}
+            {/* Option Cards */}
             <div className="mt-6 space-y-3">
-              {/* Option 1: Razorpay Online */}
+              {/* Razorpay Option */}
               <div
                 onClick={() => setMethod("online")}
                 className={`flex items-center justify-between rounded-2xl border p-4 cursor-pointer transition-all ${
@@ -209,7 +209,7 @@ export default function PaymentPages() {
                 </div>
               </div>
 
-              {/* Option 2: Cash on Delivery */}
+              {/* Cash on Delivery Option */}
               <div
                 onClick={() => setMethod("COD")}
                 className={`flex items-center justify-between rounded-2xl border p-4 cursor-pointer transition-all ${
@@ -246,7 +246,7 @@ export default function PaymentPages() {
               </div>
             </div>
 
-            {/* Error Message */}
+            {/* Error Container */}
             {error && (
               <div className="mt-4 flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300">
                 <AlertCircle className="h-4 w-4 shrink-0" />
@@ -254,7 +254,7 @@ export default function PaymentPages() {
               </div>
             )}
 
-            {/* Actions */}
+            {/* Form Actions */}
             <div className="mt-8 pt-5 border-t border-slate-800 flex items-center justify-between">
               <button
                 onClick={() => navigate("/checkout")}
@@ -301,21 +301,21 @@ export default function PaymentPages() {
             <div className="mt-4 space-y-2.5 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Shipping Recipient</span>
-                <span className="text-white font-semibold">{customer.name}</span>
+                <span className="text-cyan-200 font-semibold">{customer.name}</span>
               </div>
               <div className="flex justify-between text-slate-400">
                 <span>Address</span>
-                <span className="text-white font-semibold truncate max-w-[160px]">
+                <span className="text-cyan-200 font-semibold truncate max-w-[160px]">
                   {customer.address}
                 </span>
               </div>
               <div className="flex justify-between text-slate-400">
                 <span>Items Count</span>
-                <span className="text-white font-semibold">{items.length} product(s)</span>
+                <span className="text-cyan-200 font-semibold">{items.length} product(s)</span>
               </div>
               <div className="border-t border-slate-800 pt-3 flex justify-between items-baseline">
-                <span className="text-sm font-bold text-white">Amount Due</span>
-                <span className="text-2xl font-black text-white">
+                <span className="text-sm font-bold text-cyan-200">Amount Due</span>
+                <span className="text-2xl font-black text-cyan-200">
                   <PriceDisplay price={totalPrice} />
                 </span>
               </div>

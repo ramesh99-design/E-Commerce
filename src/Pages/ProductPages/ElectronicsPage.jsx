@@ -138,25 +138,25 @@ export default function ElectronicsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 min-h-screen">
       {/* Category Hero Banner */}
-      <div className="relative mb-8 overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-r from-violet-950/40 via-slate-900 to-indigo-950/40 p-6 sm:p-10 shadow-2xl">
+      <div className="relative mb-8 overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-r from-red-950 via-slate-900 to-cyan-950 p-6 sm:p-10 shadow-2xl">
         <div className="absolute top-0 right-0 -mt-12 -mr-12 h-64 w-64 rounded-full bg-violet-600/10 blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-300">
+            <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">
               <Laptop className="h-3.5 w-3.5" />
               <span>Next-Gen Hardware</span>
             </div>
-            <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+            <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-cyan-300">
               Electronics Collection
             </h1>
-            <p className="mt-2 max-w-xl text-xs sm:text-sm text-slate-400">
+            <p className="mt-2 max-w-xl text-xs sm:text-sm text-cyan-400">
               Explore flagship laptops, smartphones, high-resolution cameras, and gaming
               peripherals engineered for maximum power and refined aesthetics.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="rounded-xl border border-slate-800 bg-slate-900/80 px-4 py-2 text-xs font-semibold text-slate-300">
+            <span className="rounded-xl border border-slate-800 bg-slate-900/80 px-4 py-2 text-xs font-semibold text-cyan-300">
               {sortedProducts.length} Items Available
             </span>
           </div>

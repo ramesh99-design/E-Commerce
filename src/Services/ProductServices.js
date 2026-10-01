@@ -1,78 +1,87 @@
-import { collection, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../Firebase.js";
-import { electronics, books } from "../Data/Dataset.jsx";
+const API_URL = "http://localhost:5156/api/products";
 
-// Normalize local dataset as fallback in case Firestore is unreachable or empty
-const getFallbackProducts = () => {
-  const localElectronics = electronics.map((item) => ({
-    id: `electronics-${item.id}`,
-    name: item.name,
-    category: "electronics",
-    price: item.price,
-    stock: item.quantityAvailable,
-    imageLink: item.imageLink,
-    featured: true,
-    rating: 4.8,
-    reviewsCount: 124,
-    description: `High performance ${item.name} built with premium components, designed for productivity and seamless everyday use.`,
-  }));
+// Create or update a product using the backend API
+export const productUpsert = async (productId, data) => {
+  if (productId !== null && productId !== undefined && productId !== "") {
+    return updateProduct(Number(productId), data);
+  }
 
-  const localBooks = books.map((item) => ({
-    id: `books-${item.id}`,
-    name: item.title,
-    title: item.title,
-    author: item.author,
-    category: "books",
-    price: item.price,
-    stock: item.quantityAvailable,
-    imageLink: item.imageLink,
-    featured: false,
-    rating: 4.9,
-    reviewsCount: 89,
-    description: `A celebrated masterpiece by ${item.author}. Immerse yourself in unforgettable storytelling and rich, timeless prose.`,
-  }));
-
-  return [...localElectronics, ...localBooks];
+  return createProduct(data);
 };
-
+// GET: Fetch all products
 export const getProducts = async () => {
-  try {
-    const snapshot = await getDocs(collection(db, "products"));
-    if (!snapshot.empty) {
-      const items = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      if (items.length > 0) return items;
-    }
-    return getFallbackProducts();
-  } catch (error) {
-    console.warn("Firestore fetch failed, using fallback dataset:", error.message);
-    return getFallbackProducts();
+  const response = await fetch(API_URL);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch products: ${response.status}`);
   }
+
+  return response.json();
 };
 
+// GET: Fetch a single product by ID
 export const getProductById = async (id) => {
-  try {
-    const docRef = doc(db, "products", id);
-    const docSnap = await getDoc(docRef);
+  const response = await fetch(`${API_URL}/${id}`);
 
-    if (docSnap.exists()) {
-      return {
-        id: docSnap.id,
-        ...docSnap.data(),
-      };
-    }
-  } catch (error) {
-    console.warn("Firestore getProductById error, checking fallback:", error.message);
+  if (response.status === 404) {
+    return null;
   }
 
-  // Check fallback dataset
-  const fallbackAll = getFallbackProducts();
-  const match = fallbackAll.find((p) => p.id === id || String(p.id).endsWith(`-${id}`));
-  return match || null;
+  if (!response.ok) {
+    throw new Error(`Failed to fetch product: ${response.status}`);
+  }
+
+  return response.json();
 };
 
-export const productUpsert = async (docId, data) => {
-  await setDoc(doc(db, "products", docId), data, { merge: true });
+// POST: Create a new product
+export const createProduct = async (product) => {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error || `Failed to create product: ${response.status}`);
+  }
+
+  return response.json();
+};
+
+// PUT: Update an existing product
+export const updateProduct = async (id, product) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error || `Failed to update product: ${response.status}`);
+  }
+  if (response.status === 204) {
+    return { id, ...product };
+  }
+
+  return response.json();
+};
+
+// DELETE: Remove a product
+export const deleteProduct = async (id) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete product: ${response.status}`);
+  }
+
+  return true;
 };

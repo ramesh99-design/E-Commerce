@@ -17,6 +17,12 @@
     color-scheme: light;
   }
 
+  /* Force standard vertical scrollbar visibility */
+  html {
+    overflow-y: scroll;
+    scrollbar-width: thin;
+  }
+
   html, body {
     margin: 0;
     padding: 0;
@@ -24,7 +30,7 @@
   }
 
   html.dark body, body.dark {
-    background-color: #020617; /* slate-950 */
+    background-color: #fbf137; /* slate-950 */
     color: #f8fafc; /* slate-50 */
   }
 
@@ -35,8 +41,12 @@
 
   body {
     font-family: var(--font-sans);
-    overflow-x: hidden;
     transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  /* Move overflow clipping to container instead of body */
+  #root, main {
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -44,7 +54,16 @@
   }
 }
 
-/* Custom Scrollbars */
+/* Standard Scrollbar Colors for Firefox / Modern Spec */
+html.dark {
+  scrollbar-color: #334155 #090d16;
+}
+
+html.light, html:not(.dark) {
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+/* WebKit Custom Scrollbars (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;

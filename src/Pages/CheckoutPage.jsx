@@ -223,7 +223,7 @@ export default function CheckoutPage() {
                     name="postalCode"
                     value={formData.postalCode}
                     onChange={handleChange}
-                    placeholder="10001"
+                    placeholder="600015"
                     className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 px-3.5 text-xs font-medium text-white placeholder-slate-500 outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
                   />
                 </div>
@@ -254,7 +254,7 @@ export default function CheckoutPage() {
         {/* Sticky Order Review */}
         <div className="lg:col-span-5 sticky top-24">
           <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 backdrop-blur-xl shadow-2xl">
-            <h3 className="text-base font-bold text-white border-b border-slate-800 pb-4">
+            <h3 className="text-base font-bold text-cyan-200 border-b border-slate-800 pb-4">
               Items in Order ({items.length})
             </h3>
 
@@ -269,7 +269,7 @@ export default function CheckoutPage() {
                       className="h-12 w-12 rounded-lg object-cover bg-slate-950 border border-slate-800 shrink-0"
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-white truncate">
+                      <p className="font-semibold text-cyan-200 truncate">
                         {item.name || item.title}
                       </p>
                       <p className="text-[11px] text-slate-400">
@@ -277,7 +277,7 @@ export default function CheckoutPage() {
                       </p>
                     </div>
                   </div>
-                  <span className="font-bold text-slate-200">
+                  <span className="font-bold text-cyan-200">
                     <PriceDisplay price={item.price} quantity={item.quantity} />
                   </span>
                 </div>
@@ -288,7 +288,7 @@ export default function CheckoutPage() {
             <div className="mt-6 border-t border-slate-800/80 pt-4 space-y-2.5 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Subtotal</span>
-                <span className="text-white font-semibold">
+                <span className="text-cyan-200 font-semibold">
                   <PriceDisplay price={totalPrice} />
                 </span>
               </div>
@@ -297,8 +297,8 @@ export default function CheckoutPage() {
                 <span className="text-emerald-400 font-semibold">FREE</span>
               </div>
               <div className="border-t border-slate-800 pt-3 flex justify-between items-baseline">
-                <span className="text-sm font-bold text-white">Total to Pay</span>
-                <span className="text-xl font-black text-white">
+                <span className="text-sm font-bold text-cyan-200">Total to Pay</span>
+                <span className="text-xl font-black text-cyan-200">
                   <PriceDisplay price={totalPrice} />
                 </span>
               </div>
@@ -306,7 +306,7 @@ export default function CheckoutPage() {
 
             <div className="mt-6 rounded-2xl border border-slate-800/80 bg-slate-950/60 p-3.5 flex items-center gap-3">
               <ShieldCheck className="h-5 w-5 text-emerald-400 shrink-0" />
-              <p className="text-[11px] text-slate-400 leading-snug">
+              <p className="text-[11px] text-cyan-400 leading-snug">
                 Your payment and personal details are encrypted and processed securely.
               </p>
             </div>
