@@ -127,7 +127,7 @@ export default function BooksPage() {
     setCurrentPage(1);
   };
 
-  const itemsPerPage = 8;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = sortedProducts.slice(
@@ -195,7 +195,7 @@ export default function BooksPage() {
 
       {/* Product Grid Area */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           <LoadingSkeletonCard count={8} />
         </div>
       ) : sortedProducts.length === 0 ? (
@@ -216,7 +216,7 @@ export default function BooksPage() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {currentItems.map((item) => (
             <ProductCard
               key={item.id}
