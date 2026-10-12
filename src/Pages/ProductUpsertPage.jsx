@@ -2,16 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import {
   Wrench,
-  Sparkles,
   ArrowLeft,
   Upload,
   Save,
   RotateCcw,
-  CheckCircle2,
   AlertCircle,
   Eye,
-  Laptop,
-  BookOpen,
 } from "lucide-react";
 import { productUpsert, getProductById } from "../Services/ProductServices";
 import PriceDisplay from "../Components/Design/PriceDisplay";
@@ -89,9 +85,15 @@ export default function ProductUpsertPage() {
     e.preventDefault();
     setError("");
 
-    if (!docId.trim()) {
-      setError("Product ID is required (e.g. electronics-7 or books-2).");
-      return;
+    const trimmedId = docId.trim();
+
+    if (trimmedId !== "") {
+      const id = Number(trimmedId);
+
+      if (!Number.isInteger(id) || id <= 0) {
+        setError("Enter a valid positive integer Product ID.");
+        return;
+      }
     }
 
     if (!name.trim() || price === "" || stock === "") {
@@ -99,27 +101,50 @@ export default function ProductUpsertPage() {
       return;
     }
 
+    const numericPrice = Number(price);
+    const numericStock = Number(stock);
+
+    if (!Number.isFinite(numericPrice) || numericPrice <= 0) {
+      setError("Price must be greater than zero.");
+      return;
+    }
+
+    if (!Number.isInteger(numericStock) || numericStock < 0) {
+      setError("Stock must be a non-negative whole number.");
+      return;
+    }
+
     const data = {
       name: name.trim(),
       category,
-      price: Number(price),
-      stock: Number(stock),
+      price: numericPrice,
+      stock: numericStock,
       imageLink: imageLink.trim(),
-      featured,
       description: description.trim() || `${name.trim()} Description`,
+      author: category === "books" ? author.trim() : "",
     };
 
-    if (category === "books") {
-      data.author = author.trim();
-    }
-
     setSubmitting(true);
+
     try {
-      await productUpsert(docId.trim(), data);
-      toast.success(`Product "${docId.trim()}" saved successfully! 🎉`);
+      const savedProduct = await productUpsert(trimmedId, data);
+
+      // Keep the generated SQL ID in the form after creation.
+      if (savedProduct?.id != null) {
+        setDocId(String(savedProduct.id));
+      }
+
+      toast.success(
+        trimmedId
+          ? `Product ${trimmedId} updated successfully!`
+          : `Product created successfully! ID: ${savedProduct?.id ?? "saved"}`,
+      );
     } catch (err) {
-      setError("Could not save product. Please try again.");
-      toast.error("Failed to save product to database.");
+      const message =
+        err instanceof Error ? err.message : "An unexpected error occurred.";
+
+      setError(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -134,7 +159,7 @@ export default function ProductUpsertPage() {
             <Wrench className="h-4 w-4" />
             <span>Admin Inventory Portal</span>
           </div>
-          <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold text-white">
+          <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold text-dark">
             {isEditMode ? "Modify Product" : "Add New Product"}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -159,17 +184,20 @@ export default function ProductUpsertPage() {
               {/* Product ID & Load */}
               <div>
                 <label className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block mb-1">
-                  Product ID (Firestore Document ID)
+                  Product ID (SQL Server)
                 </label>
+
                 <div className="flex gap-2">
                   <input
-                    type="text"
+                    type="number"
+                    min="1"
+                    step="1"
                     value={docId}
                     onChange={(e) => setDocId(e.target.value)}
-                    placeholder="e.g. electronics-7 or books-7"
-                    required
+                    placeholder="Leave empty to add a new product"
                     className="flex-1 rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 px-3.5 text-xs text-white placeholder-slate-500 outline-none focus:border-violet-500 font-mono"
                   />
+
                   <button
                     type="button"
                     onClick={handleLoadExisting}
@@ -205,7 +233,11 @@ export default function ProductUpsertPage() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder={category === "books" ? "e.g. The Great Gatsby" : "e.g. Ultra Gaming Laptop"}
+                  placeholder={
+                    category === "books"
+                      ? "e.g. The Great Gatsby"
+                      : "e.g. Ultra Gaming Laptop"
+                  }
                   className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 px-3.5 text-xs text-white placeholder-slate-500 outline-none focus:border-violet-500"
                 />
               </div>
@@ -266,10 +298,10 @@ export default function ProductUpsertPage() {
                   Product Image URL
                 </label>
                 <input
-                  type="url"
+                  type="text"
                   value={imageLink}
                   onChange={(e) => setImageLink(e.target.value)}
-                  placeholder="https://images.pexels.com/..."
+                  placeholder="/images/book1.jpg or https://example.com/image.jpg"
                   className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 px-3.5 text-xs text-white placeholder-slate-500 outline-none focus:border-violet-500"
                 />
               </div>
@@ -353,7 +385,8 @@ export default function ProductUpsertPage() {
                     alt="Preview"
                     className="h-full w-full object-cover"
                     onError={(e) => {
-                      e.target.src = "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg";
+                      e.target.src =
+                        "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg";
                     }}
                   />
                 ) : (
