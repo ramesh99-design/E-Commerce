@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5156/api/products";
+const API_URL = "https://solving-wallpapers-dependence-annie.trycloudflare.com/api/products";
 
 // Create or update a product using the backend API
 export const productUpsert = async (productId, data) => {

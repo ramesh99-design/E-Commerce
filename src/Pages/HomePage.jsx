@@ -11,8 +11,6 @@ import {
   Star,
   Clock,
   CheckCircle2,
-  Headphones,
-  CreditCard,
   Award,
 } from "lucide-react";
 
